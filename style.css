@@ -92,9 +92,9 @@ button:active {
 
 /* Extra Cards */
 #extra {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    margin-top: 20px;
 }
 
 .card {
@@ -181,4 +181,7 @@ button:active {
     .temp {
         font-size: 40px;
     }
+}
+#mainWeather p {
+    margin: 5px 0;
 }
