@@ -159,3 +159,16 @@ async function getForecast(city) {
 
     document.getElementById("forecast").innerHTML = forecastHTML;
 }
+
+window.onload = () => {
+    getWeatherByDefault();
+};
+
+function getWeatherByDefault() {
+    fetchWeather("Hyderabad");
+}
+
+function fetchWeather(city){
+    document.getElementById("city").value = city;
+    getWeather();
+}
