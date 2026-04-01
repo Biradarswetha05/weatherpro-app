@@ -178,7 +178,16 @@ async function getForecastByCoords(lat, lon) {
     }
 }
 window.onload = () => {
-    document.getElementById("mainWeather").innerHTML = "";
-    document.getElementById("forecast").innerHTML = "";
-};
+    // Clear previous data
+    document.getElementById("mainWeather").innerHTML = `
+        <div style="text-align:center; opacity:0.7; padding:20px;">
+            🌤 <h3>Welcome to WeatherPro</h3>
+            <p>Search for a city to get real-time weather updates</p>
+        </div>
+    `;
 
+    document.getElementById("forecast").innerHTML = "";
+
+    // Clear input field
+    document.getElementById("city").value = "";
+};
