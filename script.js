@@ -177,4 +177,8 @@ async function getForecastByCoords(lat, lon) {
         document.getElementById("forecast").innerHTML = "⚠️ Forecast unavailable";
     }
 }
+window.onload = () => {
+    document.getElementById("mainWeather").innerHTML = "";
+    document.getElementById("forecast").innerHTML = "";
+};
 
