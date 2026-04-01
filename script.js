@@ -23,6 +23,7 @@ async function getWeather() {
     }
 
     showLoading();
+    document.getElementById("mainWeather").innerHTML = "⏳ Loading...";
 
     try {
         const res = await fetch(
