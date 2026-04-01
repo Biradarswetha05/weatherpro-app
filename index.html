@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherPro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+    <header>
+        <h1>🌤 WeatherPro</h1>
+        <p>Real-time weather insights</p>
+    </header>
+
+    <div class="search-box">
+        <input type="text" id="city" placeholder="Search city...">
+        <button onclick="getWeather()">🔍</button>
+        <button onclick="getLocationWeather()">📍</button>
+    </div>
+
+    <div id="loading" class="hidden">⏳ Fetching Weather...</div>
+
+    <div id="mainWeather"></div>
+    <div id="extra"></div>
+
+    <h3 class="forecast-title">🌤 Weekly Forecast</h3>
+    <div id="forecast" class="forecast"></div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
