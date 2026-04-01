@@ -178,8 +178,3 @@ async function getForecastByCoords(lat, lon) {
     }
 }
 
-// Default Load
-window.onload = () => {
-    document.getElementById("city").value = "Hyderabad";
-    getWeather();
-};
