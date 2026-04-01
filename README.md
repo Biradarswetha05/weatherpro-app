@@ -48,7 +48,7 @@ You should replace the API key in `script.js` with your own key for security.
 
 ## 💼 Author
 
-Your Name
+Biradar swetha
 
 ---
 
