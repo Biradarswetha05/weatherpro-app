@@ -13,9 +13,9 @@ function hideLoading() {
     document.getElementById("loading").classList.add("hidden");
 }
 
-// Get Weather (Improved Accuracy)
+// Get Weather (Improved)
 async function getWeather() {
-    let city = document.getElementById("city").value;
+    let city = document.getElementById("city").value.trim();
 
     if (!city) {
         alert("Enter city name");
@@ -25,9 +25,8 @@ async function getWeather() {
     showLoading();
 
     try {
-        // 🔍 Use more precise query (city + country optional)
         const res = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city},IN&appid=${apiKey}&units=metric`
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
         );
 
         const data = await res.json();
@@ -35,11 +34,14 @@ async function getWeather() {
 
         if (data.cod !== 200) {
             document.getElementById("mainWeather").innerHTML = "❌ City not found";
+            document.getElementById("forecast").innerHTML = "";
             return;
         }
 
         displayWeather(data);
-        getForecast(data.name);
+
+        // ✅ Use coordinates for accurate forecast
+        getForecastByCoords(data.coord.lat, data.coord.lon);
 
     } catch {
         hideLoading();
@@ -47,24 +49,35 @@ async function getWeather() {
     }
 }
 
-// Location Weather
+// Location Weather (Improved)
 function getLocationWeather() {
-    navigator.geolocation.getCurrentPosition(async pos => {
-        showLoading();
+    navigator.geolocation.getCurrentPosition(
+        async pos => {
+            showLoading();
 
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
 
-        const res = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
-        );
+            try {
+                const res = await fetch(
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+                );
 
-        const data = await res.json();
-        hideLoading();
+                const data = await res.json();
+                hideLoading();
 
-        displayWeather(data);
-        getForecast(data.name);
-    });
+                displayWeather(data);
+                getForecastByCoords(lat, lon);
+
+            } catch {
+                hideLoading();
+                alert("Error getting location weather");
+            }
+        },
+        () => {
+            alert("Location permission denied ❌");
+        }
+    );
 }
 
 // Convert time
@@ -75,7 +88,7 @@ function formatTime(unix) {
     });
 }
 
-// Display Weather + Extra Info
+// Display Weather
 function displayWeather(data) {
     const { name, sys, wind, coord } = data;
     const temp = Math.round(data.main.temp);
@@ -112,7 +125,7 @@ function displayWeather(data) {
         <div class="desc">${weather}</div>
 
         <p>Feels like: ${feels}°C</p>
-        <p>📍 Lat: ${coord.lat} | Lon: ${coord.lon}</p>
+        <p>📍 ${coord.lat.toFixed(2)}, ${coord.lon.toFixed(2)}</p>
 
         <p style="font-size:12px; opacity:0.7;">Data powered by OpenWeather</p>
     `;
@@ -126,40 +139,46 @@ function displayWeather(data) {
     `;
 }
 
-// Forecast (unchanged but clean)
-async function getForecast(city) {
-    const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`
-    );
+// Forecast using coordinates (MORE ACCURATE)
+async function getForecastByCoords(lat, lon) {
+    try {
+        const res = await fetch(
+            `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+        );
 
-    const data = await res.json();
+        const data = await res.json();
 
-    let forecastHTML = "";
+        let forecastHTML = "";
 
-    for (let i = 0; i < data.list.length; i += 8) {
-        const item = data.list[i];
+        for (let i = 0; i < data.list.length; i += 8) {
+            const item = data.list[i];
 
-        const dateObj = new Date(item.dt_txt);
+            const dateObj = new Date(item.dt_txt);
 
-        const day = dateObj.toLocaleDateString("en-US", {
-            weekday: "short"
-        });
+            const day = dateObj.toLocaleDateString("en-US", {
+                weekday: "short"
+            });
 
-        const temp = Math.round(item.main.temp);
-        const icon = item.weather[0].icon;
+            const temp = Math.round(item.main.temp);
+            const icon = item.weather[0].icon;
 
-        forecastHTML += `
-            <div class="forecast-card">
-                <div class="day">${day}</div>
-                <img src="https://openweathermap.org/img/wn/${icon}.png">
-                <div class="forecast-temp">${temp}°</div>
-            </div>
-        `;
+            forecastHTML += `
+                <div class="forecast-card">
+                    <div class="day">${day}</div>
+                    <img src="https://openweathermap.org/img/wn/${icon}.png">
+                    <div class="forecast-temp">${temp}°</div>
+                </div>
+            `;
+        }
+
+        document.getElementById("forecast").innerHTML = forecastHTML;
+
+    } catch {
+        document.getElementById("forecast").innerHTML = "⚠️ Forecast unavailable";
     }
-
-    document.getElementById("forecast").innerHTML = forecastHTML;
 }
 
+// Default Load
 window.onload = () => {
     document.getElementById("city").value = "Hyderabad";
     getWeather();
