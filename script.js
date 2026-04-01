@@ -32,7 +32,7 @@ async function getWeather() {
         const data = await res.json();
         hideLoading();
 
-        if (data.cod !== 200) {
+        if (parseInt(data.cod) !== 200) {
             document.getElementById("mainWeather").innerHTML = "❌ City not found";
             document.getElementById("forecast").innerHTML = "";
             return;
