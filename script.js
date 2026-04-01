@@ -1,4 +1,4 @@
-const apiKey = "1a4e478595bbf6823ca1b5ac08c963c7";
+const apiKey = "f8d05d7412d826a47ac4e3416ee81643";
 
 // Enter key
 document.getElementById("city").addEventListener("keypress", e => {
