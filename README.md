@@ -27,7 +27,7 @@ A modern and responsive weather web application that provides real-time weather 
 
 ## 🌐 Live Demo
 
-👉 https://yourusername.github.io/weatherpro-app/
+👉  https://biradarswetha05.github.io/weatherpro-app/
 
 ---
 
